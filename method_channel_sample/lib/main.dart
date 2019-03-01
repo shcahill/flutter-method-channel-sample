@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,6 +46,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+
+  MethodChannel _methodChannel = MethodChannel('package.name/sample');
 
   void _incrementCounter() {
     setState(() {
@@ -98,6 +101,9 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+            FlatButton(onPressed: _launchNativeScreen, child: Text("button 1")),
+            Divider(),
+            FlatButton(onPressed: _launchNativeScreen, child: Text("button 2")),
           ],
         ),
       ),
@@ -107,5 +113,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<Null> _launchNativeScreen() async {
+    // ネイティブ側へメッセージを送信
+    await _methodChannel.invokeMethod('test', "parameters");
   }
 }
